@@ -69,8 +69,8 @@ def return_figures(countries=country_list):
     graph_two = []
     df_two = pd.DataFrame(data_frames[1])
 
-    df_two = df_two[df_two['date'] >= '2000']
     df_two.sort_values('date', ascending=False, inplace=True)
+    df_two = df_two[df_two['date'] >= '2000']
 
     countryList = df_two.country.unique().tolist()
 

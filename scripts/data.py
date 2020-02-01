@@ -91,11 +91,57 @@ def return_figures(countries=country_list):
                     yaxis = dict(title = '%')
                     )
 
+### GRAPH 3: SUM OF FDI INFLOWS
+
+    graph_three = []
+
+    df_three = pd.DataFrame(data_frames[3])
+    df_three = df_three[df_three['country'].isin(['Lithuania', 'Latvia', 'Estonia'])]
+    df_three = df_three.groupby(['country'], as_index = False)['value'].sum()
+
+    graph_three.append(
+        go.Bar(
+        x = df_three.country.tolist(),
+        y = df_three.value.tolist(),
+        )
+    )
+
+    layout_three = dict(title = 'Sum of FDI net inflows 1993-2018',
+                xaxis = dict(title = 'Country',),
+                yaxis = dict(title = 'US$ current'),
+                )
+
+# GRAPH 4: EXPENSE AS % OF GDP
+
+    graph_four = []
+    df_four = pd.DataFrame(data_frames[2])
+
+    df_four.sort_values('date', ascending=False, inplace=True)
+
+    countryList = df_one.country.unique().tolist()
+
+    for country in countryList:
+        x_val = df_four[df_four['country'] == country].date.tolist()
+        y_val = df_four[df_four['country'] == country].value.tolist()
+        graph_four.append(
+            go.Scatter(
+            x = x_val,
+            y = y_val,
+            mode = 'lines + markers',
+            name = country
+            )
+        )
+
+    layout_four = dict(title = 'Government expense as % of GDP',
+                    xaxis = dict(title = 'Year'),
+                    yaxis = dict(title = '%')
+                    )
+
     # append all charts
     figures = []
     figures.append(dict(data=graph_one, layout=layout_one))
     figures.append(dict(data=graph_two, layout=layout_two))
-    #figures.append(dict(data=graph_three, layout=layout_three))
-    #figures.append(dict(data=graph_four, layout=layout_four))
+    figures.append(dict(data=graph_three, layout=layout_three))
+    figures.append(dict(data=graph_four, layout=layout_four))
 
     return figures
